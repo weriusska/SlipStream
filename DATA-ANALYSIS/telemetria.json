@@ -1,0 +1,291 @@
+{
+    "kierowca": "LEC",
+    "tor": "Bahrain",
+    "okrazenie": 36,
+    "telemetria": [
+        {
+            "dystans_m": 0.3,
+            "predkosc_kmh": 294
+        },
+        {
+            "dystans_m": 100.7,
+            "predkosc_kmh": 305
+        },
+        {
+            "dystans_m": 211.4,
+            "predkosc_kmh": 315
+        },
+        {
+            "dystans_m": 393.9,
+            "predkosc_kmh": 324
+        },
+        {
+            "dystans_m": 506.9,
+            "predkosc_kmh": 322
+        },
+        {
+            "dystans_m": 609.5,
+            "predkosc_kmh": 265
+        },
+        {
+            "dystans_m": 669.4,
+            "predkosc_kmh": 132
+        },
+        {
+            "dystans_m": 701.1,
+            "predkosc_kmh": 75
+        },
+        {
+            "dystans_m": 723.2,
+            "predkosc_kmh": 62
+        },
+        {
+            "dystans_m": 759.1,
+            "predkosc_kmh": 105
+        },
+        {
+            "dystans_m": 798.4,
+            "predkosc_kmh": 142
+        },
+        {
+            "dystans_m": 872.2,
+            "predkosc_kmh": 195
+        },
+        {
+            "dystans_m": 931.0,
+            "predkosc_kmh": 220
+        },
+        {
+            "dystans_m": 1020.3,
+            "predkosc_kmh": 245
+        },
+        {
+            "dystans_m": 1137.4,
+            "predkosc_kmh": 267
+        },
+        {
+            "dystans_m": 1260.3,
+            "predkosc_kmh": 282
+        },
+        {
+            "dystans_m": 1410.7,
+            "predkosc_kmh": 229
+        },
+        {
+            "dystans_m": 1469.1,
+            "predkosc_kmh": 132
+        },
+        {
+            "dystans_m": 1509.4,
+            "predkosc_kmh": 116
+        },
+        {
+            "dystans_m": 1558.1,
+            "predkosc_kmh": 141
+        },
+        {
+            "dystans_m": 1629.4,
+            "predkosc_kmh": 197
+        },
+        {
+            "dystans_m": 1707.1,
+            "predkosc_kmh": 230
+        },
+        {
+            "dystans_m": 1783.9,
+            "predkosc_kmh": 236
+        },
+        {
+            "dystans_m": 1856.0,
+            "predkosc_kmh": 188
+        },
+        {
+            "dystans_m": 1947.1,
+            "predkosc_kmh": 206
+        },
+        {
+            "dystans_m": 2019.3,
+            "predkosc_kmh": 222
+        },
+        {
+            "dystans_m": 2119.5,
+            "predkosc_kmh": 240
+        },
+        {
+            "dystans_m": 2180.7,
+            "predkosc_kmh": 119
+        },
+        {
+            "dystans_m": 2210.3,
+            "predkosc_kmh": 85
+        },
+        {
+            "dystans_m": 2237.6,
+            "predkosc_kmh": 80
+        },
+        {
+            "dystans_m": 2265.1,
+            "predkosc_kmh": 104
+        },
+        {
+            "dystans_m": 2343.1,
+            "predkosc_kmh": 184
+        },
+        {
+            "dystans_m": 2421.8,
+            "predkosc_kmh": 223
+        },
+        {
+            "dystans_m": 2526.8,
+            "predkosc_kmh": 250
+        },
+        {
+            "dystans_m": 2598.0,
+            "predkosc_kmh": 203
+        },
+        {
+            "dystans_m": 2652.4,
+            "predkosc_kmh": 126
+        },
+        {
+            "dystans_m": 2682.3,
+            "predkosc_kmh": 80
+        },
+        {
+            "dystans_m": 2713.7,
+            "predkosc_kmh": 83
+        },
+        {
+            "dystans_m": 2749.1,
+            "predkosc_kmh": 126
+        },
+        {
+            "dystans_m": 2812.0,
+            "predkosc_kmh": 191
+        },
+        {
+            "dystans_m": 2923.2,
+            "predkosc_kmh": 233
+        },
+        {
+            "dystans_m": 3018.8,
+            "predkosc_kmh": 262
+        },
+        {
+            "dystans_m": 3130.6,
+            "predkosc_kmh": 278
+        },
+        {
+            "dystans_m": 3231.5,
+            "predkosc_kmh": 286
+        },
+        {
+            "dystans_m": 3315.3,
+            "predkosc_kmh": 282
+        },
+        {
+            "dystans_m": 3387.9,
+            "predkosc_kmh": 188
+        },
+        {
+            "dystans_m": 3439.7,
+            "predkosc_kmh": 152
+        },
+        {
+            "dystans_m": 3492.3,
+            "predkosc_kmh": 173
+        },
+        {
+            "dystans_m": 3559.9,
+            "predkosc_kmh": 210
+        },
+        {
+            "dystans_m": 3628.7,
+            "predkosc_kmh": 233
+        },
+        {
+            "dystans_m": 3709.3,
+            "predkosc_kmh": 252
+        },
+        {
+            "dystans_m": 3786.9,
+            "predkosc_kmh": 253
+        },
+        {
+            "dystans_m": 3935.3,
+            "predkosc_kmh": 262
+        },
+        {
+            "dystans_m": 4014.9,
+            "predkosc_kmh": 175
+        },
+        {
+            "dystans_m": 4070.4,
+            "predkosc_kmh": 135
+        },
+        {
+            "dystans_m": 4111.3,
+            "predkosc_kmh": 141
+        },
+        {
+            "dystans_m": 4163.9,
+            "predkosc_kmh": 183
+        },
+        {
+            "dystans_m": 4220.1,
+            "predkosc_kmh": 215
+        },
+        {
+            "dystans_m": 4294.6,
+            "predkosc_kmh": 241
+        },
+        {
+            "dystans_m": 4373.2,
+            "predkosc_kmh": 259
+        },
+        {
+            "dystans_m": 4470.9,
+            "predkosc_kmh": 275
+        },
+        {
+            "dystans_m": 4573.3,
+            "predkosc_kmh": 288
+        },
+        {
+            "dystans_m": 4690.3,
+            "predkosc_kmh": 293
+        },
+        {
+            "dystans_m": 4797.3,
+            "predkosc_kmh": 228
+        },
+        {
+            "dystans_m": 4850.4,
+            "predkosc_kmh": 139
+        },
+        {
+            "dystans_m": 4920.8,
+            "predkosc_kmh": 138
+        },
+        {
+            "dystans_m": 4977.5,
+            "predkosc_kmh": 184
+        },
+        {
+            "dystans_m": 5067.8,
+            "predkosc_kmh": 230
+        },
+        {
+            "dystans_m": 5163.8,
+            "predkosc_kmh": 257
+        },
+        {
+            "dystans_m": 5252.5,
+            "predkosc_kmh": 271
+        },
+        {
+            "dystans_m": 5373.6,
+            "predkosc_kmh": 284
+        }
+    ]
+}
