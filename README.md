@@ -1,8 +1,5 @@
 # 🏎️ SlipStream - F1 Telemetry & NFC Collectibles Ecosystem
 
-> **GitHub Repository Description (for the "About" section):**
-> 🏎️ Phygital Formula 1 telemetry analysis app built with Flutter & FastAPI (FastF1). Tap custom-designed NFC driver cards to unlock high-resolution speed traces, tyre strategies, and Head-to-Head comparisons (2018–present).
-
 ## 📖 Overview
 
 **SlipStream** is a full-stack engineering and design project that bridges the physical and digital worlds (*phygital*) for Formula 1 fans. It combines **custom-designed, luxury collectible NFC driver cards** with a **mobile telemetry analysis platform**.
