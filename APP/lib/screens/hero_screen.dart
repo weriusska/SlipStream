@@ -103,8 +103,8 @@ class _HeroScreenState extends State<HeroScreen> {
         final decoded = json.decode(response.body);
         if (decoded is Map && !decoded.containsKey('error')) {
           setState(() {
-            compareData = decoded;
-            isCompareLoading = false;
+            telemetryData = Map<String, dynamic>.from(decoded);
+            isLoading = false;
           });
           return;
         }
