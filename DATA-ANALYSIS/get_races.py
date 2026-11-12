@@ -3,8 +3,15 @@ import re
 
 
 def create_slug(location_name: str) -> str:
+    """
+    Generuje nazwy dokładnie pod przygotowaną listę assetów:
+    - São Paulo -> sao_paulo
+    - Portimão -> portimao
+    - Nürburgring -> nurburgring
+    - Montréal -> montr_al
+    """
     slug = location_name.lower()
-    slug = slug.replace("ã", "a").replace("ó", "o")
+    slug = slug.replace("ã", "a").replace("ó", "o").replace("ü", "u")
     slug = re.sub(r'[^a-z0-9]+', '_', slug).strip('_')
     return slug
 

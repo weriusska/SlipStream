@@ -42,7 +42,9 @@ class _DriverPickerScreenState extends State<DriverPickerScreen> {
 
   String _mapSessionTypeForApi(String session) {
     final lower = session.toLowerCase();
-    if (lower.contains('qualifying') || lower.contains('shootout') || lower.contains('qualifications')) return 'Q';
+    // Najpierw sprawdzamy kwalifikacje sprinterskie, zanim złapie je ogólny warunek 'qualifying'!
+    if (lower.contains('sprint qualifying') || lower.contains('shootout')) return 'SQ';
+    if (lower.contains('qualifying') || lower.contains('qualifications')) return 'Q';
     if (lower.contains('fp1') || lower.contains('practice 1')) return 'FP1';
     if (lower.contains('fp2') || lower.contains('practice 2')) return 'FP2';
     if (lower.contains('fp3') || lower.contains('practice 3')) return 'FP3';
@@ -117,7 +119,7 @@ class _DriverPickerScreenState extends State<DriverPickerScreen> {
     final driverNumber = driver['driver_number'].toString();
     final abbreviation = driver['abbreviation'].toString();
     
-    final bool isSelected = selectedDriverAbbreviation == abbreviation;
+    final bool isSelected = selectedDriverAbbreviation == abbreviation || selectedDriverAbbreviation == driverNumber;
     
     final Color teamColor = _parseHexColor(driver['team_color']);
 

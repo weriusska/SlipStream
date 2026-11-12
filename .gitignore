@@ -1,0 +1,16 @@
+# Python & FastF1
+DATA-ANALYSIS/venv/
+DATA-ANALYSIS/__pycache__/
+DATA-ANALYSIS/cache/
+*.pyc
+
+# Flutter & Build
+APP/build/
+APP/.dart_tool/
+APP/.flutter-plugins
+APP/.flutter-plugins-dependencies
+
+# IDE
+.idea/
+.vscode/
+*.iml
