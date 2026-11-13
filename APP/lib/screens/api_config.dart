@@ -1,27 +1,35 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class ApiConfig {
-  // Domyślny adres dla Twojego fizycznego telefonu (Wi-Fi)
+  // Domyślnie dla fizycznego telefonu (Ngrok)
   static String baseUrl = 'https://sulphate-elusive-seltzer.ngrok-free.dev';
 
   static Future<void> init() async {
     try {
-      // Sprawdzamy tylko, jeśli jesteśmy na Androidzie
-      if (Platform.isAndroid) {
-        DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        
-        // Jeśli urządzenie NIE JEST fizyczne (czyli to emulator na laptopie)
+      // 1. Jeśli uruchomiono w przeglądarce (Chrome / Edge) -> lokalny port 5000
+      if (kIsWeb) {
+        baseUrl = 'http://127.0.0.1:5000';
+      } 
+      // 2. Jeśli uruchomiono jako aplikację Windows / macOS / Linux -> lokalny port 5000
+      else if (defaultTargetPlatform == TargetPlatform.windows ||
+               defaultTargetPlatform == TargetPlatform.macOS ||
+               defaultTargetPlatform == TargetPlatform.linux) {
+        baseUrl = 'http://127.0.0.1:5000';
+      } 
+      // 3. Jeśli to Android -> sprawdzamy czy emulator (10.0.2.2) czy fizyczny telefon (Ngrok)
+      else if (defaultTargetPlatform == TargetPlatform.android) {
+        final deviceInfo = DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+
         if (!androidInfo.isPhysicalDevice) {
-          baseUrl = 'http://10.0.2.2:5000'; 
-          print('Uruchomiono na emulatorze. Adres API: $baseUrl');
-        } else {
-          print('Uruchomiono na telefonie. Adres API: $baseUrl');
+          baseUrl = 'http://10.0.2.2:5000';
         }
       }
     } catch (e) {
-      print('Błąd podczas konfiguracji API: $e');
+      debugPrint('Błąd wykrywania platformy: $e');
     }
+
+    debugPrint('🚀 Połączono z API pod adresem: $baseUrl');
   }
 }
