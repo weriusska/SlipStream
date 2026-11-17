@@ -66,7 +66,7 @@ class _SessionPickerScreenState extends State<SessionPickerScreen> {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: bgColor.withOpacity(0.5),
+                      color: bgColor.withValues(alpha: 0.5),
                       blurRadius: 15,
                       spreadRadius: 2,
                     )

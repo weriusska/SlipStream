@@ -27,7 +27,6 @@ class _HeroScreenState extends State<HeroScreen> {
   String? errorMessage;
   Map<String, dynamic>? telemetryData;
 
-  // Stan dla trybu porównania (Head-to-Head)
   bool isCompareLoading = false;
   Map<String, dynamic>? compareData;
   String? comparedDriverAbbr;
@@ -62,9 +61,9 @@ class _HeroScreenState extends State<HeroScreen> {
             errorMessage = decoded['error'].toString();
             isLoading = false;
           });
-        } else {
+        } else if (decoded is Map) {
           setState(() {
-            telemetryData = decoded;
+            telemetryData = Map<String, dynamic>.from(decoded);
             isLoading = false;
           });
         }
@@ -103,8 +102,8 @@ class _HeroScreenState extends State<HeroScreen> {
         final decoded = json.decode(response.body);
         if (decoded is Map && !decoded.containsKey('error')) {
           setState(() {
-            telemetryData = Map<String, dynamic>.from(decoded);
-            isLoading = false;
+            compareData = Map<String, dynamic>.from(decoded);
+            isCompareLoading = false;
           });
           return;
         }
@@ -135,7 +134,7 @@ class _HeroScreenState extends State<HeroScreen> {
             if (!snapshot.hasData) {
               return const SizedBox(
                 height: 300,
-                child: Center(child: CircularProgressIndicator(color: Colors.white)),
+                child: Center(child: CircularProgressIndicator(color: Color(0xFFD4AF37))),
               );
             }
             final decoded = json.decode(snapshot.data!.body);
@@ -177,7 +176,7 @@ class _HeroScreenState extends State<HeroScreen> {
                             backgroundColor: c,
                             child: Text(
                               drv['driver_number'].toString(),
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w900),
                             ),
                           ),
                           title: Text(
@@ -317,13 +316,17 @@ class _HeroScreenState extends State<HeroScreen> {
             icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
             onPressed: () => Navigator.pop(context),
           ),
-          Text(
-            '${widget.selectedYear} ${widget.raceName.toUpperCase()} • ${telemetryData?['session_type'] ?? widget.sessionType}',
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
+          Expanded(
+            child: Text(
+              '${widget.selectedYear} ${widget.raceName.toUpperCase()} • ${telemetryData?['session_type'] ?? widget.sessionType}',
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
             ),
           ),
           if (compareData != null)
@@ -359,10 +362,10 @@ class _HeroScreenState extends State<HeroScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: teamColor.withOpacity(0.7), width: 2),
+        border: Border.all(color: teamColor.withValues(alpha: 0.7), width: 2),
         boxShadow: [
           BoxShadow(
-            color: teamColor.withOpacity(0.2),
+            color: teamColor.withValues(alpha: 0.2),
             blurRadius: 20,
             spreadRadius: 2,
           ),
@@ -440,7 +443,7 @@ class _HeroScreenState extends State<HeroScreen> {
   }
 
   // ===========================================================================
-  // WIDOK 1: KWALIFIKACJE / TRENINGI (Speed, Throttle/Brake, Gears)
+  // WIDOK 1: KWALIFIKACJE / TRENINGI (Interaktywne Speed, Throttle/Brake, Gears)
   // ===========================================================================
   Widget _buildQualiTelemetrySection(Color teamColor) {
     final List<dynamic> pts = telemetryData!['telemetry'] ?? [];
@@ -459,15 +462,27 @@ class _HeroScreenState extends State<HeroScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildChartCard(
-          title: 'SPEED PROFILE (KM/H vs DISTANCE)',
+          title: 'SPEED PROFILE (KM/H vs DISTANCE) • TOUCH TO INSPECT',
           height: 240,
           child: LineChart(
             LineChartData(
               minY: 0,
               maxY: 360,
               gridData: const FlGridData(show: true, drawVerticalLine: false),
-              titlesData: _defaultTitlesData(leftInterval: 100),
+              titlesData: _defaultTitlesData(leftInterval: 100, showBottomDistance: true),
               borderData: FlBorderData(show: false),
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      return LineTooltipItem(
+                        '${spot.x.toInt()} m\n${spot.y.toInt()} km/h',
+                        TextStyle(color: teamColor, fontWeight: FontWeight.bold, fontSize: 12),
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
               lineBarsData: [
                 LineChartBarData(
                   spots: speedSpots,
@@ -477,7 +492,7 @@ class _HeroScreenState extends State<HeroScreen> {
                   dotData: const FlDotData(show: false),
                   belowBarData: BarAreaData(
                     show: true,
-                    color: teamColor.withOpacity(0.18),
+                    color: teamColor.withValues(alpha: 0.18),
                   ),
                 ),
               ],
@@ -493,8 +508,25 @@ class _HeroScreenState extends State<HeroScreen> {
               minY: 0,
               maxY: 105,
               gridData: const FlGridData(show: true, drawVerticalLine: false),
-              titlesData: _defaultTitlesData(leftInterval: 50),
+              titlesData: _defaultTitlesData(leftInterval: 50, showBottomDistance: true),
               borderData: FlBorderData(show: false),
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      final isThrottle = spot.barIndex == 0;
+                      return LineTooltipItem(
+                        isThrottle ? 'THR: ${spot.y.toInt()}%' : 'BRK: ${spot.y > 0 ? "ON" : "OFF"}',
+                        TextStyle(
+                          color: isThrottle ? Colors.greenAccent : Colors.redAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
               lineBarsData: [
                 LineChartBarData(
                   spots: throttleSpots,
@@ -509,7 +541,7 @@ class _HeroScreenState extends State<HeroScreen> {
                   color: Colors.redAccent,
                   barWidth: 2,
                   dotData: const FlDotData(show: false),
-                  belowBarData: BarAreaData(show: true, color: Colors.redAccent.withOpacity(0.2)),
+                  belowBarData: BarAreaData(show: true, color: Colors.redAccent.withValues(alpha: 0.2)),
                 ),
               ],
             ),
@@ -524,8 +556,20 @@ class _HeroScreenState extends State<HeroScreen> {
               minY: 0,
               maxY: 9,
               gridData: const FlGridData(show: true, drawVerticalLine: false),
-              titlesData: _defaultTitlesData(leftInterval: 2),
+              titlesData: _defaultTitlesData(leftInterval: 2, showBottomDistance: true),
               borderData: FlBorderData(show: false),
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      return LineTooltipItem(
+                        '${spot.x.toInt()} m • GEAR ${spot.y.toInt()}',
+                        const TextStyle(color: Color(0xFFD4AF37), fontWeight: FontWeight.bold, fontSize: 12),
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
               lineBarsData: [
                 LineChartBarData(
                   spots: gearSpots,
@@ -543,7 +587,7 @@ class _HeroScreenState extends State<HeroScreen> {
   }
 
   // ===========================================================================
-  // WIDOK 2: WYŚCIG ('R') -> Ewolucja czasów okrążeń i opony
+  // WIDOK 2: WYŚCIG ('R') -> Ewolucja czasów, opony i lista Pit-Stopów
   // ===========================================================================
   Widget _buildRaceSection(Color teamColor) {
     final List<dynamic> laps = telemetryData!['laps'] ?? [];
@@ -558,11 +602,13 @@ class _HeroScreenState extends State<HeroScreen> {
     final minTime = (times.reduce((a, b) => a < b ? a : b) - 2).floorToDouble();
     final maxTime = (times.reduce((a, b) => a > b ? a : b) + 2).ceilToDouble();
 
+    final pitLaps = laps.where((l) => l['is_pit'] == true).map((l) => l['lap_number']).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildChartCard(
-          title: 'RACE PACE (LAP TIME IN SECONDS)',
+          title: 'RACE PACE (LAP TIME IN SECONDS) • TAP DOT FOR DETAILS',
           height: 260,
           child: LineChart(
             LineChartData(
@@ -571,6 +617,27 @@ class _HeroScreenState extends State<HeroScreen> {
               gridData: const FlGridData(show: true, drawVerticalLine: false),
               titlesData: _defaultTitlesData(leftInterval: 5),
               borderData: FlBorderData(show: false),
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      final idx = spot.spotIndex;
+                      final lapObj = laps[idx];
+                      final strTime = lapObj['lap_time_str'] ?? '';
+                      final comp = lapObj['compound'] ?? '';
+                      final isPit = lapObj['is_pit'] == true ? ' • PIT' : '';
+                      return LineTooltipItem(
+                        'LAP ${spot.x.toInt()}\n$strTime\n[$comp$isPit]',
+                        TextStyle(
+                          color: _getCompoundColor(comp.toString()),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
               lineBarsData: [
                 LineChartBarData(
                   spots: spots,
@@ -581,11 +648,12 @@ class _HeroScreenState extends State<HeroScreen> {
                     show: true,
                     getDotPainter: (spot, percent, barData, index) {
                       final compound = laps[index]['compound']?.toString() ?? 'UNKNOWN';
+                      final isPit = laps[index]['is_pit'] == true;
                       return FlDotCirclePainter(
-                        radius: 4,
+                        radius: isPit ? 6 : 4,
                         color: _getCompoundColor(compound),
-                        strokeWidth: 1.5,
-                        strokeColor: Colors.black,
+                        strokeWidth: isPit ? 2.5 : 1.5,
+                        strokeColor: isPit ? const Color(0xFFD4AF37) : Colors.black,
                       );
                     },
                   ),
@@ -607,12 +675,41 @@ class _HeroScreenState extends State<HeroScreen> {
             _CompoundLegend(label: 'INTER/WET', color: Colors.greenAccent),
           ],
         ),
+        if (pitLaps.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E1E1E),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFD4AF37).withValues(alpha: 0.4)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.build_circle_outlined, color: Color(0xFFD4AF37), size: 24),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'PIT ACTIVITY LAPS: ${pitLaps.join(", ")}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.1,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }
 
   // ===========================================================================
-  // WIDOK 3: PORÓWNANIE 1 vs 1 (Head-to-Head + Time Delta)
+  // WIDOK 3: PORÓWNANIE 1 vs 1 (Head-to-Head + Time Delta z Tooltipami)
   // ===========================================================================
   Widget _buildComparisonSection() {
     final d1 = compareData!['driver1'];
@@ -621,8 +718,7 @@ class _HeroScreenState extends State<HeroScreen> {
 
     final Color c1 = _parseHexColor(d1['team_color'] ?? '#FFFFFF');
     Color c2 = _parseHexColor(d2['team_color'] ?? '#FFD700');
-    // Jeśli obaj są z tego samego zespołu, dajemy drugiemu kierowcy złoty/biały kontrast
-    if (c1.value == c2.value) {
+    if (c1.toARGB32() == c2.toARGB32()) {
       c2 = const Color(0xFFD4AF37);
     }
 
@@ -668,8 +764,22 @@ class _HeroScreenState extends State<HeroScreen> {
               minY: 0,
               maxY: 360,
               gridData: const FlGridData(show: true, drawVerticalLine: false),
-              titlesData: _defaultTitlesData(leftInterval: 100),
+              titlesData: _defaultTitlesData(leftInterval: 100, showBottomDistance: true),
               borderData: FlBorderData(show: false),
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      final isFirst = spot.barIndex == 0;
+                      final abbr = isFirst ? d1['abbreviation'] : d2['abbreviation'];
+                      return LineTooltipItem(
+                        '$abbr: ${spot.y.toInt()} km/h',
+                        TextStyle(color: isFirst ? c1 : c2, fontWeight: FontWeight.bold, fontSize: 12),
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
               lineBarsData: [
                 LineChartBarData(
                   spots: spots1,
@@ -696,12 +806,25 @@ class _HeroScreenState extends State<HeroScreen> {
           child: LineChart(
             LineChartData(
               gridData: const FlGridData(show: true, drawVerticalLine: false),
-              titlesData: _defaultTitlesData(leftInterval: 0.5),
+              titlesData: _defaultTitlesData(leftInterval: 0.5, showBottomDistance: true),
               borderData: FlBorderData(show: false),
               extraLinesData: ExtraLinesData(
                 horizontalLines: [
                   HorizontalLine(y: 0, color: Colors.white54, strokeWidth: 1, dashArray: [4, 4]),
                 ],
+              ),
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((spot) {
+                      final sign = spot.y >= 0 ? '+' : '';
+                      return LineTooltipItem(
+                        '${spot.x.toInt()} m\n$sign${spot.y.toStringAsFixed(3)} s',
+                        const TextStyle(color: Color(0xFFD4AF37), fontWeight: FontWeight.bold, fontSize: 12),
+                      );
+                    }).toList();
+                  },
+                ),
               ),
               lineBarsData: [
                 LineChartBarData(
@@ -746,11 +869,27 @@ class _HeroScreenState extends State<HeroScreen> {
     );
   }
 
-  FlTitlesData _defaultTitlesData({required double leftInterval}) {
+  FlTitlesData _defaultTitlesData({required double leftInterval, bool showBottomDistance = false}) {
     return FlTitlesData(
       rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      bottomTitles: AxisTitles(
+        sideTitles: SideTitles(
+          showTitles: showBottomDistance,
+          reservedSize: 24,
+          interval: 1000,
+          getTitlesWidget: (value, meta) {
+            if (value == 0) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(top: 6.0),
+              child: Text(
+                '${(value / 1000).toStringAsFixed(0)}km',
+                style: const TextStyle(color: Colors.white38, fontSize: 10),
+              ),
+            );
+          },
+        ),
+      ),
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,

@@ -144,7 +144,7 @@ class _DriverPickerScreenState extends State<DriverPickerScreen> {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: teamColor.withOpacity(0.6),
+                    color: teamColor.withValues(alpha: 0.6),
                     blurRadius: 15,
                     spreadRadius: 2,
                   )

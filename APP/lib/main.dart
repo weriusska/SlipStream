@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
 import 'dart:async';
 import 'screens/welcome.dart'; 
-import 'screens/pick_a_race.dart'; // Tu pamiętaj o poprawnej ścieżce, którą ustaliliśmy
+// Tu pamiętaj o poprawnej ścieżce, którą ustaliliśmy
 import 'screens/api_config.dart'; // Pamiętaj o dodaniu tego importu!
 
 void main() async {
